@@ -3732,7 +3732,7 @@ body.page-intro-start .hero .hero-actions {
       {
         title: "EL WALET", studio: "Prikitiw",
         desc: "2.5D platformer adventure - help a swiftlet make its journey home.",
-        genre: ["Platformer","Platformer"], browser: true,
+        genre: ["Platformer"], browser: true,
         img: "https://img.itch.zone/aW1nLzI0NjAxMjQ5LnBuZw==/original/QU19tQ.png",
         url: "https://rfas-dev.itch.io/el-wallet"
       },
@@ -3785,7 +3785,7 @@ body.page-intro-start .hero .hero-actions {
     const viewport = document.getElementById('carouselViewport');
     const filterRow = document.getElementById('filterRow');
 
-    [...new Set(games.map(g => g.genre))].forEach(g => {
+   [...new Set(games.flatMap(g => Array.isArray(g.genre) ? g.genre : [g.genre]))].forEach(g => {
       const btn = document.createElement('button');
       btn.className = 'fchip';
       btn.dataset.filter = g;
@@ -3794,7 +3794,10 @@ body.page-intro-start .hero .hero-actions {
     });
 
     function renderCards(filter) {
-      const filtered = games.filter(g => filter === 'all' || g.genre === filter);
+      const filtered = games.filter(g =>
+        filter === 'all' ||
+        (Array.isArray(g.genre) ? g.genre.includes(filter) : g.genre === filter)
+      );
       track.innerHTML = '';
       filtered.forEach((g, i) => {
         const card = document.createElement('article');
